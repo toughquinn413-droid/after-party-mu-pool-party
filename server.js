@@ -1,0 +1,16 @@
+const express=require("express");
+const http=require("http");
+const {Server}=require("socket.io");
+const path=require("path");
+const app=express(), server=http.createServer(app), io=new Server(server,{cors:{origin:"*"}});
+app.use(express.json()); app.use(express.static(__dirname));
+const rooms=["General","Games","Transport","Music","Vibes"];
+const history=Object.fromEntries(rooms.map(r=>[r,[]]));
+const bookings=new Map();
+app.get("/health",(req,res)=>res.json({ok:true}));
+app.get("/api/config",(req,res)=>res.json({discountPrice:20000,standardPrice:25000,paymentNumber:"+256795318747"}));
+app.post("/api/bookings",(req,res)=>{const b=req.body||{};if(!b.name||!b.phone||!b.qty)return res.status(400).json({error:"Missing booking details"});const id="BPP-"+Date.now().toString(36).toUpperCase();const row={id,name:b.name,phone:b.phone,qty:Number(b.qty),total:Number(b.qty)*20000,status:"PENDING",createdAt:Date.now()};bookings.set(id,row);res.json(row)});
+app.get("/api/bookings",(req,res)=>res.json([...bookings.values()]));
+app.post("/api/bookings/:id/approve",(req,res)=>{const b=bookings.get(req.params.id);if(!b)return res.status(404).json({error:"Not found"});b.status="APPROVED";res.json(b)});
+io.on("connection",s=>{s.username="Guest-"+Math.floor(100+Math.random()*900);s.on("joinRoom",r=>{if(!rooms.includes(r))r="General";rooms.forEach(x=>s.leave(x));s.join(r);s.room=r;s.emit("history",history[r])});s.on("chatMessage",({room,message})=>{if(!rooms.includes(room)||!message)return;const m={username:s.username,message:String(message).slice(0,500),time:Date.now()};history[room].push(m);if(history[room].length>100)history[room].shift();io.to(room).emit("chatMessage",m)})});
+const PORT=process.env.PORT||3000;server.listen(PORT,"0.0.0.0",()=>console.log("Running on "+PORT));
