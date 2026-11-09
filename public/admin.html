@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin — After Party Mu Pool Party</title><link rel="stylesheet" href="/styles.css"></head><body><div class="main">
+<nav><a class="brand" href="/">AFTER PARTY <span>ADMIN</span></a><a href="/">← Public site</a></nav>
+<main>
+<section><div class="section-head"><span>ADMIN</span><div><h2>Control Center</h2><p>Manage bookings, payments, tickets and event settings.</p></div></div>
+<div id="login" class="card"><h3>Admin login</h3><input id="password" type="password" placeholder="Admin password"><button class="btn primary" onclick="login()">LOGIN</button><p class="small">Set ADMIN_PASSWORD on the server before production. The default development password is shown in README only.</p></div>
+<div id="dash" style="display:none">
+<div class="cards three" id="stats"></div>
+<div class="card" style="margin-top:20px"><h3>Bookings</h3><div style="overflow:auto"><table id="table" style="width:100%;border-collapse:collapse"></table></div></div>
+<div class="card" style="margin-top:20px"><h3>Event settings</h3><label>Discount price<input id="price" type="number" value="20000"></label><label>Standard price<input id="standard" type="number" value="25000"></label><label>Payment number<input id="pay" value="+256 795 318 747"></label><button class="btn primary" onclick="saveSettings()">SAVE SETTINGS</button></div>
+</div></section>
+</main>
+<script>
+let token="";
+function esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+async function login(){const p=document.getElementById("password").value;const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})});const j=await r.json();if(!r.ok)return alert(j.error||"Login failed");token=j.token;document.getElementById("login").style.display="none";document.getElementById("dash").style.display="block";load()}
+async function api(url,opt={}){opt.headers={...(opt.headers||{}),Authorization:"Bearer "+token,"Content-Type":"application/json"};const r=await fetch(url,opt);const j=await r.json();if(!r.ok)throw new Error(j.error||"Request failed");return j}
+async function load(){const a=await api("/api/admin/bookings"),stats=document.getElementById("stats");stats.innerHTML=`<div class="card"><h3>Bookings</h3><b>${a.length}</b></div><div class="card"><h3>Approved tickets</h3><b>${a.filter(x=>x.status==="APPROVED").length}</b></div><div class="card"><h3>Revenue</h3><b>UGX ${a.filter(x=>x.status==="APPROVED").reduce((s,x)=>s+x.total,0).toLocaleString()}</b></div>`;let t="<tr><th>ID</th><th>Guest</th><th>Phone</th><th>Qty</th><th>Total</th><th>Status</th><th>Action</th></tr>";a.forEach(x=>t+=`<tr><td>${esc(x.id)}</td><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${x.qty}</td><td>UGX ${x.total.toLocaleString()}</td><td>${esc(x.status)}</td><td>${x.status==="PENDING"?`<button class="btn primary" onclick="approve('${x.id}')">Confirm payment</button>`:x.status==="APPROVED"?`<a class="btn glass" href="/ticket.html?id=${encodeURIComponent(x.id)}">Ticket</a>`:""}</td></tr>`);document.getElementById("table").innerHTML=t}
+async function approve(id){await api("/api/admin/bookings/"+encodeURIComponent(id)+"/approve",{method:"POST"});load()}
+async function saveSettings(){await api("/api/admin/settings",{method:"POST",body:JSON.stringify({discountPrice:+document.getElementById("price").value,standardPrice:+document.getElementById("standard").value,paymentNumber:document.getElementById("pay").value})});alert("Settings saved.");}
+</script></div></body></html>
