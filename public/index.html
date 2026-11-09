@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>After Party Mu Pool Party — Buyala</title>
+<style>
+:root{--red:#f21d25;--green:#13a34a;--blue:#08aeea;--dark:#07131c}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#fff;background:#03131c}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(#00131c99,#00131ccc),url("party-background.jpg") center/cover fixed;z-index:-2}
+body:after{content:"";position:fixed;inset:0;background:#00131c44;z-index:-1}
+nav{position:sticky;top:0;z-index:20;background:#03131ce8;padding:12px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff33;backdrop-filter:blur(10px)}
+.logo{font-weight:900}.logo span{color:#17d2ff}.nav a{color:#fff;text-decoration:none;margin-left:15px;font-size:14px}
+.hero{min-height:82vh;display:grid;place-items:center;padding:60px 5%}.heroBox{max-width:1000px;text-align:center;background:#00131c99;border:1px solid #ffffff33;border-radius:28px;padding:35px;backdrop-filter:blur(5px);box-shadow:0 25px 80px #0008}
+h1{font-size:clamp(42px,8vw,82px);margin:0;text-transform:uppercase;text-shadow:0 8px 25px #000}.heroBox p{font-size:19px;line-height:1.6}.buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.btn{display:inline-block;padding:14px 20px;border:0;border-radius:13px;font-weight:900;cursor:pointer;text-decoration:none}.primary{background:linear-gradient(90deg,#13d3ff,#21e66f);color:#00131c}.red{background:linear-gradient(90deg,#ff2630,#ff8a00);color:#fff}.dark{background:#ffffff18;color:#fff;border:1px solid #fff3}
+section{max-width:1100px;margin:auto;padding:70px 5%}.card{background:#031923e8;border:1px solid #ffffff25;border-radius:22px;padding:25px;box-shadow:0 20px 60px #0006}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.price{font-size:38px;font-weight:900;color:#5dff9a}.discount{color:#fff;background:#e91d25;border-radius:10px;padding:8px 12px;display:inline-block;font-weight:900}
+.checkout{display:grid;grid-template-columns:1fr 1fr;gap:20px}.field{margin:12px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input,.field select{width:100%;padding:14px;border-radius:10px;border:1px solid #ffffff33;background:#061a24;color:#fff}
+.notice{background:#ffca281c;border:1px solid #ffca2870;padding:13px;border-radius:12px;color:#ffe7a1;margin:12px 0}.success{background:#13a34a22;border:1px solid #37e87a66;padding:13px;border-radius:12px}
+.admin{display:none}.admin.show{display:block}.admin table{width:100%;border-collapse:collapse}.admin th,.admin td{padding:10px;border-bottom:1px solid #ffffff20;text-align:left}.small{font-size:12px;color:#b8c9d2}
+.chat{display:grid;grid-template-columns:200px 1fr;min-height:500px}.rooms{border-right:1px solid #ffffff22}.room{padding:13px;cursor:pointer}.room.active,.room:hover{background:#ffffff12}.messages{height:400px;overflow:auto;padding:20px}.msg{margin-bottom:12px}.bubble{display:inline-block;padding:10px 13px;background:#ffffff12;border-radius:12px}.chatform{display:flex;gap:8px;padding:12px;border-top:1px solid #ffffff22}.chatform input{flex:1;padding:13px;background:#071923;border:1px solid #ffffff22;border-radius:10px;color:#fff}.chatform button{padding:0 20px;border:0;border-radius:10px;background:#08cfff;font-weight:900}
+footer{text-align:center;padding:30px;color:#b9c9d1}
+@media(max-width:800px){.grid,.checkout,.chat{grid-template-columns:1fr}.rooms{border-right:0;border-bottom:1px solid #fff2;display:flex;overflow:auto}.room{white-space:nowrap}.navlinks{display:none}}
+</style>
+</head>
+<body>
+<nav><div class="logo">AFTER PARTY <span>MU POOL PARTY</span></div><div class="navlinks"><a href="#tickets">Tickets</a><a href="#chat">Chat</a><a href="#admin">Admin</a></div></nav>
+
+<header class="hero">
+<div class="heroBox">
+<div class="discount">🔥 20-DAY DISCOUNT: UGX 20,000</div>
+<h1>After Party Mu Pool Party</h1>
+<p><b>18 December 2026</b> • Primland Gardens, Buyala</p>
+<p>Relax • Swim • Have Fun • Swimming Competition • Water Volleyball • Water Balloon Fight • Apple Eating • Truth or Dare</p>
+<div class="buttons"><a class="btn primary" href="#tickets">GET DISCOUNT TICKET — UGX 20K</a><a class="btn dark" href="#chat">JOIN LIVE CHAT</a></div>
+</div>
+</header>
+
+<section id="tickets">
+<h2>🎟️ Book & Pay for Your Ticket</h2>
+<div class="checkout">
+<div class="card">
+<h3>Step 1 — Enter details</h3>
+<div class="field"><label>Full name</label><input id="name" placeholder="Guest name"></div>
+<div class="field"><label>Phone number</label><input id="phone" placeholder="+256..."></div>
+<div class="field"><label>Number of tickets</label><select id="qty"><option value="1">1 ticket</option><option value="2">2 tickets</option><option value="3">3 tickets</option><option value="4">4 tickets</option><option value="5">5 tickets</option></select></div>
+<p>Discount price: <span class="price">UGX 20,000</span> per head</p>
+<div class="notice">Payment number: <b>+256 795 318 747</b><br>After payment, an administrator verifies the transaction before your ticket is approved.</div>
+<button class="btn primary" onclick="startPayment()">INITIATE PAYMENT</button>
+</div>
+
+<div class="card">
+<h3>Step 2 — Payment & approval</h3>
+<div id="paymentStatus">Enter your details and tap <b>INITIATE PAYMENT</b>.</div>
+<div id="ticketArea" style="display:none;margin-top:18px"></div>
+</div>
+</div>
+</section>
+
+<section id="chat">
+<h2>💬 Live Party Chat</h2>
+<div class="card chat">
+<div class="rooms"><div class="room active" data-room="General">💬 General</div><div class="room" data-room="Games">🎯 Games</div><div class="room" data-room="Transport">🚌 Transport</div><div class="room" data-room="Music">🎧 Music</div><div class="room" data-room="Vibes">🔥 Vibes</div></div>
+<div><div id="messages" class="messages"><div class="msg"><b>System</b><div class="bubble">Welcome to the party chat.</div></div></div><form id="chatForm" class="chatform"><input id="message" placeholder="Type a message..."><button>Send</button></form></div>
+</div>
+</section>
+
+<section id="admin">
+<h2>🔐 Admin Control Panel</h2>
+<div class="card">
+<p class="small">Demo/admin interface is included. For production, the administrator should use a server-side account and database; do not rely on a browser-only password for real payment control.</p>
+<div id="adminLogin">
+<input id="adminPass" type="password" placeholder="Admin password" style="padding:13px;border-radius:10px;border:1px solid #fff3;background:#061a24;color:#fff">
+<button class="btn primary" onclick="adminLogin()">LOGIN</button>
+</div>
+<div id="adminPanel" class="admin">
+<h3>Pending bookings</h3>
+<table><thead><tr><th>Ticket</th><th>Guest</th><th>Phone</th><th>Qty</th><th>Status</th><th>Action</th></tr></thead><tbody id="orders"></tbody></table>
+<div class="buttons" style="justify-content:flex-start;margin-top:20px"><button class="btn dark" onclick="changePrice()">Change discount price</button><button class="btn red" onclick="clearOrders()">Clear demo orders</button></div>
+</div>
+</div>
+</section>
+
+<footer>After Party Mu Pool Party • 18 December 2026 • Primland Gardens, Buyala • Payment: +256 795 318 747</footer>
+
+<script>
+let room="General", socket=null;
+const ADMIN_PASSWORD="admin123"; // change this on the server before production
+function esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function startPayment(){
+ const name=document.getElementById("name").value.trim(), phone=document.getElementById("phone").value.trim(), qty=+document.getElementById("qty").value;
+ if(!name||!phone){alert("Please enter your name and phone number.");return}
+ const total=qty*20000, ticket="BPP-"+Date.now().toString(36).toUpperCase();
+ const msg=`Payment request for ${ticket}: ${qty} ticket(s), UGX ${total.toLocaleString()}. Guest: ${name}`;
+ const status=document.getElementById("paymentStatus");
+ status.innerHTML=`<div class="success"><b>Payment initiated.</b><br>Send <b>UGX ${total.toLocaleString()}</b> to <b>+256 795 318 747</b> using Mobile Money.<br><br><button class="btn primary" onclick="openMoMo()">OPEN PAYMENT ON PHONE</button><br><span class="small">Your booking is now sent for admin verification. Ticket approval happens after payment is confirmed.</span></div>`;
+ const orders=JSON.parse(localStorage.getItem("bpp_orders")||"[]");
+ orders.push({ticket,name,phone,qty,total,status:"Pending"});
+ localStorage.setItem("bpp_orders",JSON.stringify(orders));
+}
+function openMoMo(){
+ // A normal website cannot force a Mobile Money PIN/authorization screen for an arbitrary number.
+ // Open a phone-friendly payment instruction instead of pretending payment succeeded.
+ window.location.href="tel:*165*3*1*0795318747*20000%23";
+}
+function adminLogin(){if(document.getElementById("adminPass").value===ADMIN_PASSWORD){document.getElementById("adminPanel").classList.add("show");renderOrders()}else alert("Wrong admin password.");}
+function renderOrders(){
+ const orders=JSON.parse(localStorage.getItem("bpp_orders")||"[]"), body=document.getElementById("orders"); body.innerHTML="";
+ orders.forEach((o,i)=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(o.ticket)}</td><td>${esc(o.name)}</td><td>${esc(o.phone)}</td><td>${o.qty}</td><td>${o.status}</td><td><button class="btn primary" onclick="approve(${i})">Approve</button></td>`;body.appendChild(tr)})
+}
+function approve(i){const a=JSON.parse(localStorage.getItem("bpp_orders")||"[]");a[i].status="Approved";localStorage.setItem("bpp_orders",JSON.stringify(a));renderOrders();alert("Booking approved. The guest can now be issued a QR ticket after the payment gateway/webhook confirms payment.")}
+function changePrice(){const p=prompt("Enter new discount price in UGX","20000");if(p&&Number(p)>0)alert("Price change recorded for this demo. For production, save it server-side.");}
+function clearOrders(){if(confirm("Clear all demo bookings?")){localStorage.removeItem("bpp_orders");renderOrders()}}
+document.querySelectorAll(".room").forEach(x=>x.onclick=()=>{document.querySelectorAll(".room").forEach(y=>y.classList.remove("active"));x.classList.add("active");room=x.dataset.room;if(socket)socket.emit("joinRoom",room)});
+document.getElementById("chatForm").onsubmit=e=>{e.preventDefault();let m=document.getElementById("message").value.trim();if(!m)return;if(socket)socket.emit("chatMessage",{room,message:m});else addMsg("You",m);document.getElementById("message").value=""};
+function addMsg(u,m){let d=document.createElement("div");d.className="msg";d.innerHTML=`<b>${esc(u)}</b><div class="bubble">${esc(m)}</div>`;document.getElementById("messages").appendChild(d)}
+try{socket=io();socket.on("connect",()=>socket.emit("joinRoom",room));socket.on("chatMessage",m=>addMsg(m.username,m.message));socket.on("history",a=>a.forEach(m=>addMsg(m.username,m.message)))}catch(e){}
+</script>
+<script src="/socket.io/socket.io.js"></script>
+</body>
+</html>
